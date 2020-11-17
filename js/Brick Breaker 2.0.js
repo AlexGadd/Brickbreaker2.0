@@ -130,7 +130,7 @@ function ballLeaveScreen(){
   lives--;
   if(lives){
     livesText.setText('Lives: ' +lives);
-    livesLostText.visible = true;
+    lifeLostText.visible = true;
     ball.reset(game.world.width*0.5, game.world.height-25);
     paddle.reset(game.world.width*0.5, game.world.height-5);
     game.input.onDown.addOnce(function(){
