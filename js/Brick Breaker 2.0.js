@@ -61,7 +61,7 @@ function create() {
   //Displaying lives
   livesText = game.add.text(game.world.width-5, 5, 'Lives: '+lives, textStyle);
   livesText.anchor.set(1,0)
-  livesLostText = game.add.text(game.world.width*0.5, game.world.height*0.5, 'Life lost, click to continue', textStyle)
+  lifeLostText = game.add.text(game.world.width*0.5, game.world.height*0.5, 'Life lost, click to continue', textStyle)
   lifeLostText.anchor.set(0.5);
   lifeLostText.visible = false;
 };
