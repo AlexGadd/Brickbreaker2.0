@@ -9,8 +9,12 @@ var paddle;
 var bricks;
 var newBrick;
 var brickInfo;
+var textStyle = { font: '18px Arial', fill: '#0095DD' };
 var score = 0;
 var scoreText;
+var lives = 3;
+var livesText;
+var lifeLostText;
 
 
 
@@ -46,16 +50,20 @@ function create() {
   //game over code
   game.physics.arcade.checkCollision.down = false;
   ball.checkWorldBounds = true;
-  ball.events.onOutOfBounds.add(function(){
-    alert('Game over!')
-    location.reload()
-  }, this)
+  ball.events.onOutOfBounds.add(ballLeaveScreen, this);
 
   //Bringing the bricks into the game
   initBricks()
 
   //Scoring system
-  scoreText = game.add.text(5,5, 'Points: ' + score, { font: '18px Arial', fill: '#0095DD'})
+  scoreText = game.add.text(10,10, 'Points: ' + score, textStyle)
+
+  //Displaying lives
+  livesText = game.add.text(game.world.width-5, 5, 'Lives: '+lives, textStyle);
+  livesText.anchor.set(1,0)
+  livesLostText = game.add.text(game.world.width*0.5, game.world.height*0.5, 'Life lost, click to continue', textStyle)
+  lifeLostText.anchor.set(0.5);
+  lifeLostText.visible = false;
 };
 
 function update() {
@@ -97,7 +105,41 @@ function initBricks(){
 
 //Brick collisions
 function ballHitBrick(ball, brick){
+  //Kills bricks and update score
   brick.kill()
   score += 1
   scoreText.setText('Points: ' + score);
+
+  //checks to see how many bricks are left
+  var count_alive = 0;
+  for (i=0; i<bricks.children.length; i++){
+    if(bricks.children[i].alive == true){
+      count_alive++;
+    }
+  }
+
+  //once the number of bricks is  less than 1 it triggers an end game
+  if (count_alive < 1){
+    alert("Congratulations, you won!");
+    location.reload();
+  }
+}
+
+//out of bounds function
+function ballLeaveScreen(){
+  lives--;
+  if(lives){
+    livesText.setText('Lives: ' +lives);
+    livesLostText.visible = true;
+    ball.reset(game.world.width*0.5, game.world.height-25);
+    paddle.reset(game.world.width*0.5, game.world.height-5);
+    game.input.onDown.addOnce(function(){
+      lifeLostText.visible = false;
+      ball.body.velocity.set(150, -150);
+    }, this)
+  }
+  else{
+    alert('You lost!')
+    location.reload()
+  }
 }
