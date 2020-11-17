@@ -9,6 +9,8 @@ var paddle;
 var bricks;
 var newBrick;
 var brickInfo;
+var score = 0;
+var scoreText;
 
 
 
@@ -49,8 +51,11 @@ function create() {
     location.reload()
   }, this)
 
-    //Bringing the bricks into the game
-    initBricks()
+  //Bringing the bricks into the game
+  initBricks()
+
+  //Scoring system
+  scoreText = game.add.text(5,5, 'Points: ' + score, { font: '18px Arial', fill: '#0095DD'})
 };
 
 function update() {
@@ -93,4 +98,6 @@ function initBricks(){
 //Brick collisions
 function ballHitBrick(ball, brick){
   brick.kill()
+  score += 1
+  scoreText.setText('Points: ' + score);
 }
